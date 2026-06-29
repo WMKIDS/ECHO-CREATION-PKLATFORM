@@ -35,10 +35,10 @@ if (USE_POSTGRES) {
             }
             pool.query(translateSchema(convertSql(sql)), params || [])
                 .then(res => {
-                    if (callback) callback.call(this, null);
+                    if (callback) callback.call({ lastID: res.oid, changes: res.rowCount }, null);
                 })
                 .catch(err => {
-                    if (callback) callback.call(this, err);
+                    if (callback) callback.call({ lastID: 0, changes: 0 }, err);
                 });
         },
         get: function(sql, params, callback) {
@@ -79,10 +79,10 @@ if (USE_POSTGRES) {
                     }
                     pool.query(convertedSql, params)
                         .then(res => {
-                            if (callback) callback.call(this, null);
+                            if (callback) callback.call({ lastID: res.oid, changes: res.rowCount }, null);
                         })
                         .catch(err => {
-                            if (callback) callback.call(this, err);
+                            if (callback) callback.call({ lastID: 0, changes: 0 }, err);
                         });
                 },
                 finalize: function() {}
