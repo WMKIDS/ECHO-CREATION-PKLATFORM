@@ -73,14 +73,12 @@ app.post('/api/forum-posts', (req, res) => {
     const date = "الآن";
     const tagsStr = JSON.stringify(tags || []);
 
-    const stmt = db.prepare('INSERT INTO forum_posts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    stmt.run(id, author, role, avatar, title, content, likes, tagsStr, date, function(err) {
+    db.run('INSERT INTO forum_posts (id, author, role, avatar, title, content, likes, tags, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [id, author, role, avatar, title, content, likes, tagsStr, date], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({
             id, author, role, avatar, title, content, likes, tags: tags || [], date, replies: []
         });
     });
-    stmt.finalize();
 });
 
 // Add a reply to a post (إضافة رد على منشور)
@@ -95,12 +93,10 @@ app.post('/api/forum-posts/:id/replies', (req, res) => {
     const role = "المشرف والأدمن";
     const avatar = "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=100&q=80";
 
-    const stmt = db.prepare('INSERT INTO forum_replies VALUES (?, ?, ?, ?, ?, ?)');
-    stmt.run(id, postId, author, role, avatar, content, function(err) {
+    db.run('INSERT INTO forum_replies (id, post_id, author, role, avatar, content) VALUES (?, ?, ?, ?, ?, ?)', [id, postId, author, role, avatar, content], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ id, post_id: postId, author, role, avatar, content });
     });
-    stmt.finalize();
 });
 
 // Basic Route
@@ -182,12 +178,10 @@ app.post('/api/admin/services', verifyToken, (req, res) => {
     const id = `serv-${Date.now()}`;
     const skillsStr = JSON.stringify(skills || []);
 
-    const stmt = db.prepare('INSERT INTO services VALUES (?, ?, ?, ?, ?, ?, 1, ?)');
-    stmt.run(id, title, description, category, price, icon || 'code', skillsStr, function(err) {
+    db.run('INSERT INTO services (id, title, description, category, price, icon, active, skills) VALUES (?, ?, ?, ?, ?, ?, 1, ?)', [id, title, description, category, price, icon || 'code', skillsStr], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ id, title, description, category, price, icon, active: 1, skills: skills || [] });
     });
-    stmt.finalize();
 });
 
 // Add a course (إضافة كورس)
@@ -196,12 +190,10 @@ app.post('/api/admin/courses', verifyToken, (req, res) => {
     const id = `course-${Date.now()}`;
     const lessonsStr = JSON.stringify(lessons || []);
 
-    const stmt = db.prepare('INSERT INTO courses VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, 0, ?)');
-    stmt.run(id, title, description, instructor, level, duration, price, category, lessonsStr, function(err) {
+    db.run('INSERT INTO courses (id, title, description, instructor, level, duration, price, active, category, enrolledStudents, lessons) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, 0, ?)', [id, title, description, instructor, level, duration, price, category, lessonsStr], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ id, title, description, instructor, level, duration, price, active: 1, category, enrolledStudents: 0, lessons: lessons || [] });
     });
-    stmt.finalize();
 });
 
 // Toggle service status (تبديل حالة الخدمة)
