@@ -1,20 +1,113 @@
-const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-// Create a database file or open it if it exists
-const db = new sqlite3.Database('./database.sqlite', (err) => {
-    if (err) {
-        console.error('Error opening database', err.message);
-    } else {
-        console.log('Connected to the SQLite database.');
-        // Initialize tables and mock data
+const USE_POSTGRES = !!process.env.DATABASE_URL;
+
+let db;
+
+// Helper to convert ? to $1, $2, etc for postgres
+function convertSql(sql) {
+    if (!USE_POSTGRES) return sql;
+    let count = 1;
+    return sql.replace(/\?/g, () => `$${count++}`);
+}
+
+// Translate SQLite syntax to PostgreSQL syntax
+function translateSchema(sql) {
+    if (!USE_POSTGRES) return sql;
+    return sql.replace(/INTEGER PRIMARY KEY AUTOINCREMENT/g, 'SERIAL PRIMARY KEY');
+}
+
+if (USE_POSTGRES) {
+    const { Pool } = require('pg');
+    const pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
+    });
+
+    console.log('Connecting to PostgreSQL database.');
+
+    db = {
+        run: function(sql, params, callback) {
+            if (typeof params === 'function') {
+                callback = params;
+                params = [];
+            }
+            pool.query(translateSchema(convertSql(sql)), params || [])
+                .then(res => {
+                    if (callback) callback.call(this, null);
+                })
+                .catch(err => {
+                    if (callback) callback.call(this, err);
+                });
+        },
+        get: function(sql, params, callback) {
+            if (typeof params === 'function') {
+                callback = params;
+                params = [];
+            }
+            pool.query(convertSql(sql), params || [])
+                .then(res => {
+                    if (callback) callback(null, res.rows[0]);
+                })
+                .catch(err => {
+                    if (callback) callback(err);
+                });
+        },
+        all: function(sql, params, callback) {
+             if (typeof params === 'function') {
+                callback = params;
+                params = [];
+            }
+            pool.query(convertSql(sql), params || [])
+                .then(res => {
+                    if (callback) callback(null, res.rows);
+                })
+                .catch(err => {
+                    if (callback) callback(err);
+                });
+        },
+        prepare: function(sql) {
+            // Mock prepare statement
+            const convertedSql = convertSql(sql);
+            return {
+                run: function(...args) {
+                    let callback;
+                    let params = args;
+                    if (args.length > 0 && typeof args[args.length - 1] === 'function') {
+                        callback = args.pop();
+                    }
+                    pool.query(convertedSql, params)
+                        .then(res => {
+                            if (callback) callback.call(this, null);
+                        })
+                        .catch(err => {
+                            if (callback) callback.call(this, err);
+                        });
+                },
+                finalize: function() {}
+            };
+        }
+    };
+
+    // Test connection and initialize
+    pool.query('SELECT 1').then(() => {
         initDatabase();
-    }
-});
+    }).catch(err => console.error('Postgres connection error', err));
+
+} else {
+    const sqlite3 = require('sqlite3').verbose();
+    db = new sqlite3.Database('./database.sqlite', (err) => {
+        if (err) {
+            console.error('Error opening database', err.message);
+        } else {
+            console.log('Connected to the SQLite database.');
+            initDatabase();
+        }
+    });
+}
 
 function initDatabase() {
-    // إنشاء جدول الخدمات
     // Create services table
     db.run(`CREATE TABLE IF NOT EXISTS services (
         id TEXT PRIMARY KEY,
@@ -27,7 +120,6 @@ function initDatabase() {
         skills TEXT
     )`);
 
-    // إنشاء جدول الكورسات
     // Create courses table
     db.run(`CREATE TABLE IF NOT EXISTS courses (
         id TEXT PRIMARY KEY,
@@ -43,7 +135,6 @@ function initDatabase() {
         lessons TEXT
     )`);
 
-    // إنشاء جدول المنشورات
     // Create forum posts table
     db.run(`CREATE TABLE IF NOT EXISTS forum_posts (
         id TEXT PRIMARY KEY,
@@ -57,7 +148,6 @@ function initDatabase() {
         date TEXT
     )`);
 
-    // إنشاء جدول الردود
     // Create forum replies table
     db.run(`CREATE TABLE IF NOT EXISTS forum_replies (
         id TEXT PRIMARY KEY,
@@ -69,7 +159,6 @@ function initDatabase() {
         FOREIGN KEY (post_id) REFERENCES forum_posts(id)
     )`);
 
-    // إنشاء جدول المستخدمين (المدراء)
     // Create users (admin) table
     db.run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,27 +168,33 @@ function initDatabase() {
         if (!err) {
             // Seed Admin User
             bcrypt.hash('admin123', 10, (err, hash) => {
-                db.run(`INSERT OR IGNORE INTO users (username, password) VALUES ('admin', ?)`, [hash]);
+                let insertSql = `INSERT INTO users (username, password) VALUES ('admin', ?)`;
+                if(USE_POSTGRES) {
+                     insertSql = `INSERT INTO users (username, password) VALUES ('admin', ?) ON CONFLICT (username) DO NOTHING`;
+                } else {
+                     insertSql = `INSERT OR IGNORE INTO users (username, password) VALUES ('admin', ?)`;
+                }
+                db.run(insertSql, [hash]);
             });
         }
     });
 
-    // إضافة البيانات الافتراضية إذا كانت الجداول فارغة
     // Seed initial mock data if tables are empty
     db.get('SELECT COUNT(*) as count FROM services', (err, row) => {
-        if (row && row.count === 0) {
+        // postgres returns string for count
+        if (row && parseInt(row.count) === 0) {
             seedServices();
         }
     });
 
     db.get('SELECT COUNT(*) as count FROM courses', (err, row) => {
-        if (row && row.count === 0) {
+        if (row && parseInt(row.count) === 0) {
             seedCourses();
         }
     });
 
     db.get('SELECT COUNT(*) as count FROM forum_posts', (err, row) => {
-        if (row && row.count === 0) {
+        if (row && parseInt(row.count) === 0) {
             seedForumPosts();
         }
     });
