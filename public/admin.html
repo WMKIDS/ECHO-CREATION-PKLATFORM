@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Echo Creation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { slate: { 950: '#020617' } } } } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white hidden" id="admin-body">
+    <div id="notification-container"></div>
+
+    <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-3 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/" class="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <span class="text-white font-extrabold text-lg tracking-wider">E</span>
+                </a>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Echo Creation</h1>
+                    <p class="text-xs text-slate-500">الفضاء البرمجي والتعليمي المتكامل 🚀</p>
+                </div>
+            </div>
+
+            <nav class="flex items-center bg-slate-900/60 p-1.5 rounded-xl border border-slate-800/80 overflow-x-auto max-w-full">
+                <a href="/" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="layout" class="w-4 h-4"></i><span>الرئيسية</span>
+                </a>
+                <a href="/courses.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i><span>الأكاديمية</span>
+                </a>
+                <a href="/forum.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="message-square" class="w-4 h-4"></i><span>المنتدى</span>
+                </a>
+                <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-purple-600 text-white shadow whitespace-nowrap">
+                    <i data-lucide="sliders" class="w-4 h-4"></i><span>لوحة التحكم</span>
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button id="logout-btn" class="flex items-center gap-1.5 px-4 py-2 bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/20 rounded-xl text-xs font-bold transition-all">
+                    تسجيل الخروج
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 lg:px-8 space-y-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black text-white">لوحة تحكم الإدارة والتحكم ⚙️</h3>
+                <p class="text-slate-400 text-sm">تحكم فورياً في محتويات المنصة، أضف، احذف، وتتبع الكورسات والخدمات</p>
+            </div>
+            <div class="bg-purple-950/40 border border-purple-500/20 text-purple-300 px-4 py-2 rounded-xl text-xs font-semibold">
+                وضع المطور المحترف: نشط
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">المستخدمين المسجلين</span>
+                    <i data-lucide="user" class="w-5 h-5 text-indigo-400"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-white">342</span>
+                    <span class="text-xs text-emerald-400 font-semibold">+12%</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+                    <div class="h-full bg-indigo-500" style="width: 70%"></div>
+                </div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">الطلاب النشطين</span>
+                    <i data-lucide="graduation-cap" class="w-5 h-5 text-purple-400"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-white">242</span>
+                    <span class="text-xs text-emerald-400 font-semibold">+8%</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+                    <div class="h-full bg-purple-500" style="width: 85%"></div>
+                </div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">الشهادات الممنوحة</span>
+                    <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-white">39</span>
+                    <span class="text-xs text-slate-400">مكتملة</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500" style="width: 45%"></div>
+                </div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400">مستوى حماية السيرفر</span>
+                    <i data-lucide="lock" class="w-5 h-5 text-rose-400"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-black text-white">100%</span>
+                    <span class="text-xs text-emerald-400 font-semibold">ممتاز</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500" style="width: 100%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Management -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6">
+            <div>
+                <h4 class="text-lg font-bold text-white">لوحة إدارة وتفعيل الخدمات في المتجر</h4>
+                <p class="text-xs text-slate-400">انقر على زر التشغيل/الإيقاف ($ON/OFF$) لتفعيل أو إخفاء الخدمات</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400">
+                            <th class="pb-3 font-semibold">اسم الخدمة والمهارات</th>
+                            <th class="pb-3 font-semibold">التصنيف</th>
+                            <th class="pb-3 font-semibold">السعر المالي</th>
+                            <th class="pb-3 font-semibold">الحالة</th>
+                            <th class="pb-3 font-semibold">العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-services-list" class="divide-y divide-slate-800/60 text-xs">
+                        <tr><td colspan="5" class="py-4 text-center text-slate-500">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Courses Management -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6">
+            <div>
+                <h4 class="text-lg font-bold text-white">لوحة إدارة وتفعيل الكورسات</h4>
+                <p class="text-xs text-slate-400">تحكم بظهور الكورسات في الواجهة المخصصة للطلاب</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400">
+                            <th class="pb-3 font-semibold">عنوان الكورس</th>
+                            <th class="pb-3 font-semibold">المدرس / المدة</th>
+                            <th class="pb-3 font-semibold">الطلاب المسجلين</th>
+                            <th class="pb-3 font-semibold">السعر المالي</th>
+                            <th class="pb-3 font-semibold">الحالة</th>
+                            <th class="pb-3 font-semibold">العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-courses-list" class="divide-y divide-slate-800/60 text-xs">
+                        <tr><td colspan="6" class="py-4 text-center text-slate-500">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Add Forms -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Add Service -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-4">
+                <h4 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5 text-indigo-400"></i>
+                    <span>إضافة خدمة جديدة</span>
+                </h4>
+                <form id="add-service-form" class="space-y-4 text-xs">
+                    <div class="space-y-1">
+                        <label class="text-slate-400">اسم الخدمة</label>
+                        <input type="text" id="srv-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-slate-400">التصنيف</label>
+                            <select id="srv-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                                <option>برمجة وتطوير</option><option>تصاميم</option><option>أنظمة وبرمجة</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-400">قيمة الخدمة</label>
+                            <input type="text" id="srv-price" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">المهارات التقنية (مفصولة بفاصلة)</label>
+                        <input type="text" id="srv-skills" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">الوصف الفني</label>
+                        <textarea id="srv-desc" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all">
+                        إضافة وتفعيل الخدمة
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Course -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-4">
+                <h4 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5 text-purple-400"></i>
+                    <span>نشر كورس جديد</span>
+                </h4>
+                <form id="add-course-form" class="space-y-4 text-xs">
+                    <div class="space-y-1">
+                        <label class="text-slate-400">عنوان الدورة</label>
+                        <input type="text" id="crs-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="space-y-1">
+                            <label class="text-slate-400">السعر</label>
+                            <input type="text" id="crs-price" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-400">المدة</label>
+                            <input type="text" id="crs-duration" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-400">المستوى</label>
+                            <select id="crs-level" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                                <option>مبتدئ</option><option>متوسط</option><option>متقدم</option><option>من مبتدئ إلى محترف</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">الدروس (مفصولة بفاصلة)</label>
+                        <input type="text" id="crs-lessons" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">وصف الكورس</label>
+                        <textarea id="crs-desc" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all">
+                        نشر وتنشيط الكورس
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

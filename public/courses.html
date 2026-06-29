@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأكاديمية - Echo Creation</title>
+    <meta name="description" content="تصفح كورسات البرمجة والذكاء الاصطناعي مع أفضل المدربين.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { slate: { 950: '#020617' } } } } }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+    <div id="notification-container"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-3 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="/admin.html" class="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 cursor-pointer hover:scale-105 transition-transform">
+                    <span class="text-white font-extrabold text-lg tracking-wider">E</span>
+                </a>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Echo Creation</h1>
+                    <p class="text-xs text-slate-500">الفضاء البرمجي والتعليمي المتكامل 🚀</p>
+                </div>
+            </div>
+
+            <nav class="flex items-center bg-slate-900/60 p-1.5 rounded-xl border border-slate-800/80 overflow-x-auto max-w-full">
+                <a href="/" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="layout" class="w-4 h-4"></i><span>الرئيسية والمعرض</span>
+                </a>
+                <a href="/courses.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-indigo-600 text-white shadow whitespace-nowrap">
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i><span>الأكاديمية</span>
+                </a>
+                <a href="/forum.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="message-square" class="w-4 h-4"></i><span>المنتدى</span>
+                </a>
+                <a href="/admin.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-300 whitespace-nowrap">
+                    <i data-lucide="sliders" class="w-4 h-4"></i><span>لوحة التحكم</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 lg:px-8 space-y-10">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h3 class="text-3xl font-black text-white">أكاديمية Echo التعليمية 🎓</h3>
+                <p class="text-slate-400 text-sm">ابنِ مهاراتك خطوة بخطوة بالذكاء الاصطناعي مع مدربين حقيقيين</p>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 p-2 rounded-xl">
+                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span id="courses-count" class="text-xs text-slate-400 font-semibold">مجموع الكورسات المتاحة: 0 كورس</span>
+            </div>
+        </div>
+
+        <div id="courses-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="col-span-full py-12 text-center bg-slate-900/40 rounded-2xl border border-dashed border-slate-800">
+                <p class="text-slate-500 text-sm">جاري تحميل الكورسات...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Creation - الفضاء البرمجي المتكامل</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="منصتك المتكاملة لتصميم وتطوير المستقبل. ابدأ مع خدمات التطوير أو تصفح الأكاديمية والمنتدى.">
+    <meta name="keywords" content="برمجة, تطوير ويب, تصميم واجهات, بايثون, React, SEO">
+    <meta name="author" content="Echo Creation">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: { 950: '#020617' }
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white">
+    <!-- Notifications Container -->
+    <div id="notification-container"></div>
+
+    <!-- Header / Navigation (شريط الملاحة) -->
+    <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-3 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <a href="/admin.html" class="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 cursor-pointer hover:scale-105 transition-transform" title="انقر لفتح لوحة التحكم">
+                    <span class="text-white font-extrabold text-lg tracking-wider">E</span>
+                </a>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Echo Creation</h1>
+                    <p class="text-xs text-slate-500">الفضاء البرمجي والتعليمي المتكامل 🚀</p>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex items-center bg-slate-900/60 p-1.5 rounded-xl border border-slate-800/80 overflow-x-auto max-w-full">
+                <a href="/" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-indigo-600 text-white shadow whitespace-nowrap">
+                    <i data-lucide="layout" class="w-4 h-4"></i>
+                    <span>الرئيسية والمعرض</span>
+                </a>
+                <a href="/courses.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                    <span>الأكاديمية</span>
+                </a>
+                <a href="/forum.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    <span>المنتدى</span>
+                </a>
+                <a href="/admin.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-400 hover:text-slate-300 whitespace-nowrap">
+                    <i data-lucide="sliders" class="w-4 h-4"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+            </nav>
+
+            <div class="hidden lg:flex items-center gap-3">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-slate-900 border border-slate-800 rounded-full text-xs text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>خادم بايثون متصل</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 lg:px-8 space-y-12">
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden bg-slate-900/40 border border-slate-800/60 rounded-3xl p-8 lg:p-12">
+            <div class="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl -z-10"></div>
+
+            <div class="max-w-3xl space-y-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold">
+                    <i data-lucide="flame" class="w-3.5 h-3.5"></i>
+                    <span>تكنولوجيا Vibe Coding فائقة التطور</span>
+                </span>
+
+                <h2 class="text-3xl lg:text-5xl font-black tracking-tight leading-tight">
+                    مرحباً بك في <span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Echo Creation</span>. منصتك المتكاملة لتصميم وتطوير المستقبل.
+                </h2>
+
+                <p class="text-slate-400 text-base lg:text-lg leading-relaxed">
+                    نحن ندمج بين أحدث لغات الواجهة الأمامية وسرعة خوادم بايثون (Python Backend) مع محرك بحث وتصفح ذكي مدعوم بالكامل بالذكاء الاصطناعي لتسريع بناء مشاريعك.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                    <a href="/courses.html" class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-semibold shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/30 transform hover:-translate-y-0.5 transition-all inline-block">
+                        تصفح الأكاديمية البرمجية 🎓
+                    </a>
+                    <a href="/forum.html" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-xl font-semibold border border-slate-700 transition-all inline-block">
+                        شارك في منتدى الطلاب 💬
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Search Section -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">مساعد تصفح الخدمات والكورسات بالذكاء الاصطناعي</h3>
+                    <p class="text-xs text-slate-400">اطرح سؤالاً بلغة طبيعية لكي يقوم المساعد بتحليل طلبك وترشيح الأنسب لك من قاعدة بياناتنا</p>
+                </div>
+            </div>
+
+            <form id="ai-search-form" class="flex gap-2">
+                <div class="relative flex-grow">
+                    <input type="text" id="search-input" placeholder="جرب كتابة: 'أريد كورس لتعلم بايثون' أو 'أبحث عن تصميم واجهات فخمة'..." class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-3.5 pr-10 text-slate-100 placeholder-slate-500 text-sm focus:outline-none transition-all">
+                    <i data-lucide="search" class="absolute right-3.5 top-3.5 w-5 h-5 text-slate-500"></i>
+                </div>
+                <button type="submit" id="search-btn" class="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-medium rounded-xl text-sm transition-all flex items-center gap-2">
+                    <span id="search-btn-text">توجيه بالذكاء</span>
+                </button>
+            </form>
+
+            <!-- AI Response Container -->
+            <div id="ai-response-container" class="hidden p-6 bg-slate-950 border border-slate-800/80 rounded-2xl space-y-4 animate-fade-in-down">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                        <p class="text-xs font-bold text-slate-400 tracking-wide">الاستجابة والترشيحات المقترحة:</p>
+                    </div>
+                    <button id="close-ai-response" class="text-xs text-slate-500 hover:text-slate-300">إغلاق التحليل</button>
+                </div>
+                <p id="ai-response-text" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></p>
+
+                <div id="ai-services-container" class="hidden space-y-2 pt-2">
+                    <p class="text-xs font-bold text-indigo-400">الخدمات الفنية المطابقة:</p>
+                    <div id="ai-services-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+
+                <div id="ai-courses-container" class="hidden space-y-2 pt-2">
+                    <p class="text-xs font-bold text-purple-400">الكورسات البرمجية المقترحة:</p>
+                    <div id="ai-courses-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Gallery Section -->
+        <section class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-2xl font-black text-white">معرض الخدمات الإبداعية والتطويرية</h3>
+                    <p class="text-sm text-slate-400">اختر من باقتنا لتطوير مشروعك الفعلي والبدء فوراً</p>
+                </div>
+                <span id="services-count" class="text-xs font-bold text-slate-500">مجموع الخدمات النشطة: 0</span>
+            </div>
+
+            <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Services will be injected here via JS -->
+                <div class="col-span-full py-12 text-center bg-slate-900/40 rounded-2xl border border-dashed border-slate-800">
+                    <p class="text-slate-500 text-sm">جاري تحميل الخدمات...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Bottom Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/20 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-start gap-3">
+                <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">نظام حماية الويب الشامل</h4>
+                    <p class="text-xs text-slate-400">مبني بالكامل بتوثيق آمن وحماية من هجمات XSS وحقن قواعد البيانات.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">مؤشر سيو (SEO) ذكي</h4>
+                    <p class="text-xs text-slate-400">مهيأ لتسريع فهرسة الكورسات والخدمات في محرك بحث جوجل (Google Core Web Vitals).</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <div class="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-white">تكامل الأكاديمية والمنتدى</h4>
+                    <p class="text-xs text-slate-400">تحديث فوري للمنشورات والردود والدروس التفاعلية للطلاب المسجلين.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-12 px-4 lg:px-8 mt-20">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">E</span>
+                    </div>
+                    <span class="text-white font-bold">Echo Creation</span>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed max-w-sm">
+                    المنصة البرمجية والتعليمية الرائدة في دمج قوة الذكاء الاصطناعي مع تقنيات الويب السريعة وبايثون لبناء مشاريع المستقبل بكفاءة وأمان وسيو معتمد.
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <h5 class="text-xs font-bold text-white tracking-widest uppercase">روابط سريعة</h5>
+                <ul class="space-y-2 text-xs text-slate-400">
+                    <li><a href="/" class="hover:text-indigo-400 transition-colors">معرض الأعمال والخدمات</a></li>
+                    <li><a href="/courses.html" class="hover:text-indigo-400 transition-colors">أكاديمية الطلاب التعليمية</a></li>
+                    <li><a href="/forum.html" class="hover:text-indigo-400 transition-colors">منتدى النقاش والمجتمع</a></li>
+                    <li><a href="/admin.html" class="hover:text-indigo-400 transition-colors">لوحة تحكم الأدمن السرية</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-4">
+                <h5 class="text-xs font-bold text-white tracking-widest uppercase">تابعنا على السوشيال ميديا</h5>
+                <div class="flex items-center gap-3">
+                    <a href="https://tiktok.com" target="_blank" rel="noreferrer" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-all">T</a>
+                    <a href="https://snapchat.com" target="_blank" rel="noreferrer" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-all">S</a>
+                    <a href="https://facebook.com" target="_blank" rel="noreferrer" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-all">F</a>
+                    <a href="https://instagram.com" target="_blank" rel="noreferrer" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-indigo-600 transition-all">I</a>
+                </div>
+                <p class="text-[10px] text-slate-600">حقوق النشر والملكية الفكرية © 2026 محفوظة لـ Echo Creation & عمر الفاروق.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
