@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const db = require('./db');
+db.initDatabase();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,7 +13,8 @@ app.use(helmet({
 }));
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public')); // Serve frontend files (تقديم ملفات الواجهة)
+app.use(express.static('public')); // Serve public frontend files
+app.use('/admin', express.static('admin')); // Serve admin files
 
 // --- Public API Endpoints (نقاط الوصول العامة) ---
 
@@ -100,7 +102,15 @@ app.post('/api/forum-posts/:id/replies', (req, res) => {
 });
 
 // Basic Route
+
+app.get('/admin', (req, res) => {
+    res.sendFile(__dirname + '/admin/admin.html');
+});
+app.get('/admin/login', (req, res) => {
+    res.sendFile(__dirname + '/admin/login.html');
+});
 app.get('/', (req, res) => {
+
     res.sendFile(__dirname + '/public/index.html');
 });
 
@@ -235,6 +245,131 @@ app.delete('/api/admin/courses/:id', verifyToken, (req, res) => {
     db.run('DELETE FROM courses WHERE id = ?', [req.params.id], function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: "تم الحذف بنجاح" });
+    });
+});
+
+
+// Get all active portfolio items (Public)
+app.get('/api/portfolio', (req, res) => {
+    db.all('SELECT * FROM portfolio WHERE active = 1', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+// Get all active portfolio stats (Public)
+app.get('/api/portfolio-stats', (req, res) => {
+    db.all('SELECT * FROM portfolio_stats', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+// Admin: Get all portfolio items
+app.get('/api/admin/portfolio', verifyToken, (req, res) => {
+    db.all('SELECT * FROM portfolio', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+// Admin: Add portfolio item
+app.post('/api/admin/portfolio', verifyToken, (req, res) => {
+    const { title, description, category, status, link, image } = req.body;
+    const id = `port-${Date.now()}`;
+    db.run('INSERT INTO portfolio (id, title, description, category, status, link, image, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)',
+        [id, title, description, category, status, link, image], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ id, title, description, category, status, link, image, active: 1 });
+    });
+});
+
+// Admin: Delete portfolio item
+app.delete('/api/admin/portfolio/:id', verifyToken, (req, res) => {
+    db.run('DELETE FROM portfolio WHERE id = ?', [req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Deleted" });
+    });
+});
+
+// Admin: Toggle portfolio active status
+app.put('/api/admin/portfolio/:id/toggle', verifyToken, (req, res) => {
+    const id = req.params.id;
+    db.get('SELECT active FROM portfolio WHERE id = ?', [id], (err, row) => {
+        if (err || !row) return res.status(404).json({ error: "Item not found" });
+        const newStatus = row.active === 1 ? 0 : 1;
+        db.run('UPDATE portfolio SET active = ? WHERE id = ?', [newStatus, id], function(err) {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ id, active: newStatus });
+        });
+    });
+});
+
+// Admin: Get all stats
+app.get('/api/admin/portfolio-stats', verifyToken, (req, res) => {
+    db.all('SELECT * FROM portfolio_stats', [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+// Admin: Add stats
+app.post('/api/admin/portfolio-stats', verifyToken, (req, res) => {
+    const { label, value, icon } = req.body;
+    const id = `stat-${Date.now()}`;
+    db.run('INSERT INTO portfolio_stats (id, label, value, icon) VALUES (?, ?, ?, ?)', [id, label, value, icon], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ id, label, value, icon });
+    });
+});
+
+// Admin: Delete stats
+app.delete('/api/admin/portfolio-stats/:id', verifyToken, (req, res) => {
+    db.run('DELETE FROM portfolio_stats WHERE id = ?', [req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Deleted" });
+    });
+});
+
+
+// Admin: Edit service
+app.put('/api/admin/services/:id', verifyToken, (req, res) => {
+    const { title, description, category, price, icon, skills } = req.body;
+    const skillsStr = JSON.stringify(skills || []);
+    db.run('UPDATE services SET title = ?, description = ?, category = ?, price = ?, icon = ?, skills = ? WHERE id = ?',
+        [title, description, category, price, icon || 'code', skillsStr, req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: req.params.id });
+    });
+});
+
+// Admin: Edit course
+app.put('/api/admin/courses/:id', verifyToken, (req, res) => {
+    const { title, description, instructor, level, duration, price, category, lessons } = req.body;
+    const lessonsStr = JSON.stringify(lessons || []);
+    db.run('UPDATE courses SET title = ?, description = ?, instructor = ?, level = ?, duration = ?, price = ?, category = ?, lessons = ? WHERE id = ?',
+        [title, description, instructor, level, duration, price, category, lessonsStr, req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: req.params.id });
+    });
+});
+
+// Admin: Edit portfolio item
+app.put('/api/admin/portfolio/:id', verifyToken, (req, res) => {
+    const { title, description, category, status, link, image } = req.body;
+    db.run('UPDATE portfolio SET title = ?, description = ?, category = ?, status = ?, link = ?, image = ? WHERE id = ?',
+        [title, description, category, status, link, image, req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: req.params.id });
+    });
+});
+
+// Admin: Edit stats
+app.put('/api/admin/portfolio-stats/:id', verifyToken, (req, res) => {
+    const { label, value, icon } = req.body;
+    db.run('UPDATE portfolio_stats SET label = ?, value = ?, icon = ? WHERE id = ?', [label, value, icon, req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: req.params.id });
     });
 });
 

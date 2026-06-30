@@ -33,6 +33,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Home Page Logic (منطق الصفحة الرئيسية) ---
 async function initHome() {
+    // Fetch Portfolio Data
+    async function loadPortfolio() {
+        const grid = document.getElementById('portfolio-grid');
+        const items = await fetchAPI('/api/portfolio');
+        if (!grid) return;
+
+        if (items.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-12 text-center bg-slate-900/40 rounded-2xl border border-dashed border-slate-800">
+                    <p class="text-slate-500 text-sm">لا توجد أعمال لعرضها حالياً.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const renderItems = (filter = 'all') => {
+            const filtered = filter === 'all' ? items : items.filter(i => i.status === filter);
+            grid.innerHTML = filtered.map(item => `
+                <div class="group relative bg-slate-900/60 border border-slate-800/80 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300">
+                    <div class="h-48 bg-slate-800 overflow-hidden relative">
+                        ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : `<div class="w-full h-full flex items-center justify-center text-slate-600"><i data-lucide="image" class="w-8 h-8"></i></div>`}
+                        <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-sm text-[10px] font-bold text-white px-2 py-1 rounded-md border border-slate-700/50 uppercase tracking-wide">
+                            ${escapeHTML(item.category)}
+                        </div>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <h4 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">${escapeHTML(item.title)}</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed line-clamp-2">${escapeHTML(item.description)}</p>
+                        ${item.link ? `<a href="${escapeHTML(item.link)}" target="_blank" class="inline-flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 transition-colors font-semibold mt-2">معاينة المشروع <i data-lucide="external-link" class="w-3 h-3"></i></a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            if (window.lucide) lucide.createIcons();
+        };
+
+        renderItems();
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-indigo-600', 'text-white');
+                    b.classList.add('bg-slate-800', 'text-slate-300');
+                });
+                e.target.classList.remove('bg-slate-800', 'text-slate-300');
+                e.target.classList.add('bg-indigo-600', 'text-white');
+                renderItems(e.target.dataset.filter);
+            });
+        });
+    }
+
+    async function loadStats() {
+        const statsSec = document.getElementById('stats-section');
+        if (!statsSec) return;
+        const stats = await fetchAPI('/api/portfolio-stats');
+        if (stats.length === 0) return;
+
+        statsSec.innerHTML = stats.map(stat => `
+            <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 text-center space-y-2 hover:bg-slate-900 transition-colors">
+                <div class="w-10 h-10 mx-auto rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4">
+                    <i data-lucide="${escapeHTML(stat.icon || 'star')}" class="w-5 h-5"></i>
+                </div>
+                <h4 class="text-3xl font-black text-white">${escapeHTML(stat.value)}</h4>
+                <p class="text-xs text-slate-400 font-semibold">${escapeHTML(stat.label)}</p>
+            </div>
+        `).join('');
+        if (window.lucide) lucide.createIcons();
+    }
+
+    loadPortfolio();
+    loadStats();
+
     const servicesGrid = document.getElementById('services-grid');
     const countSpan = document.getElementById('services-count');
 

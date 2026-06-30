@@ -9,7 +9,7 @@
       tailwind.config = { theme: { extend: { colors: { slate: { 950: '#020617' } } } } }
     </script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/admin/css/style.css">
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white hidden" id="admin-body">
     <div id="notification-container"></div>
@@ -165,6 +165,53 @@
             </div>
         </section>
 
+
+        <!-- Portfolio Management -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6">
+            <div>
+                <h4 class="text-lg font-bold text-white">إدارة معرض الأعمال والمشاريع (Portfolio)</h4>
+                <p class="text-xs text-slate-400">تحكم بالمشاريع والمنتجات المعروضة في الصفحة الرئيسية</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400">
+                            <th class="pb-3 font-semibold">المشروع</th>
+                            <th class="pb-3 font-semibold">التصنيف والنوع</th>
+                            <th class="pb-3 font-semibold">الحالة</th>
+                            <th class="pb-3 font-semibold">العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-portfolio-list" class="divide-y divide-slate-800/60 text-xs">
+                        <tr><td colspan="4" class="py-4 text-center text-slate-500">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Stats Management -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-6">
+            <div>
+                <h4 class="text-lg font-bold text-white">إدارة الإحصائيات (Stats)</h4>
+                <p class="text-xs text-slate-400">تعديل الأرقام الإحصائية المعروضة في الرئيسية</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400">
+                            <th class="pb-3 font-semibold">الرقم/القيمة</th>
+                            <th class="pb-3 font-semibold">العنوان</th>
+                            <th class="pb-3 font-semibold">الأيقونة</th>
+                            <th class="pb-3 font-semibold">العمليات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-stats-list" class="divide-y divide-slate-800/60 text-xs">
+                        <tr><td colspan="4" class="py-4 text-center text-slate-500">جاري التحميل...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <!-- Add Forms -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Add Service -->
@@ -244,10 +291,103 @@
                     </button>
                 </form>
             </div>
-        </div>
+            </div>
+
+            <!-- Add Portfolio -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-4">
+                <h4 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5 text-emerald-400"></i>
+                    <span>إضافة مشروع جديد</span>
+                </h4>
+                <form id="add-portfolio-form" class="space-y-4 text-xs">
+                    <div class="space-y-1">
+                        <label class="text-slate-400">اسم المشروع</label>
+                        <input type="text" id="port-title" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-slate-400">التصنيف (Category)</label>
+                            <input type="text" id="port-category" placeholder="مثال: تطوير ويب" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-slate-400">الحالة (Status)</label>
+                            <select id="port-status" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                                <option value="completed">مكتمل</option>
+                                <option value="product">منتج</option>
+                                <option value="in-progress">قيد التنفيذ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">رابط المعاينة (اختياري)</label>
+                        <input type="text" id="port-link" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">رابط الصورة (اختياري)</label>
+                        <input type="text" id="port-image" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">الوصف</label>
+                        <textarea id="port-desc" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all">
+                        نشر المشروع
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Stat -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-4">
+                <h4 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5 text-blue-400"></i>
+                    <span>إضافة إحصائية جديدة</span>
+                </h4>
+                <form id="add-stat-form" class="space-y-4 text-xs">
+                    <div class="space-y-1">
+                        <label class="text-slate-400">القيمة (الرقم)</label>
+                        <input type="text" id="stat-value" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">العنوان</label>
+                        <input type="text" id="stat-label" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-slate-400">اسم الأيقونة (من Lucide)</label>
+                        <input type="text" id="stat-icon" placeholder="مثال: star, users, check" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all">
+                        حفظ الإحصائية
+                    </button>
+                </form>
+            </div>
+
     </main>
 
-    <script src="/js/api.js"></script>
-    <script src="/js/admin.js"></script>
+    <script src="/admin/js/api.js"></script>
+    <script src="/admin/js/admin.js"></script>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-4 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h4 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="edit" class="w-5 h-5 text-indigo-400"></i>
+                    <span id="edit-modal-title">تعديل عنصر</span>
+                </h4>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="edit-form" class="space-y-4 text-xs">
+                <!-- Inputs injected dynamically -->
+                <div id="edit-form-inputs" class="space-y-4"></div>
+                <div class="flex gap-2">
+                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all">حفظ التعديلات</button>
+                    <button type="button" onclick="closeEditModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
