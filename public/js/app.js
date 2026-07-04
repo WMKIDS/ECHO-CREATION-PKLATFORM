@@ -15,6 +15,48 @@ function escapeHTML(str) {
 }
 
 
+// --- Articles Section Logic ---
+async function initArticles() {
+    const grid = document.getElementById('articles-grid');
+    const loading = document.getElementById('articles-loading');
+
+    if (typeof fetchArticles !== 'function') return;
+
+    const articles = await fetchArticles();
+
+    if (!articles || articles.length === 0) {
+        if (loading) {
+            loading.innerHTML = '<p class="text-slate-500 text-sm">لا توجد مقالات حالياً أو تعذر جلبها من Strapi.</p>';
+        }
+        return;
+    }
+
+    if (loading) {
+        loading.remove();
+    }
+
+    grid.innerHTML = articles.map(articleObj => {
+        const article = articleObj.attributes || articleObj;
+
+        let coverHtml = '';
+        if (article.Cover && article.Cover.data) {
+            const url = 'http://localhost:1337' + article.Cover.data.attributes.url;
+            coverHtml = `<img src="${escapeHTML(url)}" alt="cover" class="w-full h-40 object-cover rounded-t-3xl" />`;
+        }
+
+        return `
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl flex flex-col hover:border-indigo-500/40 transition-all">
+            ${coverHtml}
+            <div class="p-6 lg:p-8 space-y-4">
+                <h4 class="text-xl font-bold text-white">${escapeHTML(article.Title)}</h4>
+                <div class="text-sm text-slate-400 prose prose-invert">${article.Content}</div>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+
 // Initialize Icons (تفعيل أيقونات Lucide)
 document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) {
@@ -24,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     if (path === '/' || path.includes('index.html')) {
         initHome();
+        initArticles();
     } else if (path.includes('courses.html')) {
         initCourses();
     } else if (path.includes('forum.html')) {
